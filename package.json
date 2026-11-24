@@ -4,7 +4,15 @@
   "description": "**Osmangazi Belediyesi Araştırma ve Geliştirme Müdürlüğü Dijital Yönetim Portalı**",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "repository": {
     "type": "git",
@@ -13,18 +21,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/asliozbakir-lab/Unicorn/issues"
   },
   "homepage": "https://github.com/asliozbakir-lab/Unicorn#readme",
   "dependencies": {
-    "@prisma/client": "^7.10.1",
+    "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
     "iron-session": "^9.1.1",
     "lucide-react": "^1.79.0",
     "next": "^16.4.6",
-    "prisma": "^8.0.0-rc.35",
+    "prisma": "^6.19.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "recharts": "^3.11.1",
@@ -40,6 +48,7 @@
     "eslint-config-next": "^16.4.6",
     "postcss": "^8.5.33",
     "tailwindcss": "^4.3.5",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }

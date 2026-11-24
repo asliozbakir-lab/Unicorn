@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 140 10% 97%; /* #F7F9F8 */
+    --foreground: 240 28% 15%; /* #1A1A2E */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 240 28% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 28% 15%;
+    --primary: 164 65% 26%; /* #176C55 Koyu Yeşil */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 72 62% 37%; /* #839B24 Zeytin Yeşili */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 150 10% 92%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 72 62% 92%;
+    --accent-foreground: 164 65% 26%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 10% 88%;
+    --input: 150 10% 88%;
+    --ring: 164 65% 26%;
+    --radius: 0.75rem;
+  }
+}
+
+body {
+  background-color: #F7F9F8;
+  color: #1A1A2E;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Kurumsal Yardımcı Sınıflar */
+.bg-osmangazi-dark {
+  background-color: #176C55;
+}
+
+.text-osmangazi-dark {
+  color: #176C55;
+}
+
+.bg-osmangazi-olive {
+  background-color: #839B24;
+}
+
+.text-osmangazi-olive {
+  color: #839B24;
+}
+
+.border-osmangazi-dark {
+  border-color: #176C55;
+}
+
+.border-osmangazi-olive {
+  border-color: #839B24;
+}

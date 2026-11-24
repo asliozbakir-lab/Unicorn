@@ -1,0 +1,288 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  title        String?   // "Endüstriyel Tasarım Mühendisi", "AR-GE Müdürü", "Yüksek Mimar"
+  department   String?   @default("Araştırma ve Geliştirme Müdürlüğü")
+  roleId       String
+  role         Role      @relation(fields: [roleId], references: [id])
+  isActive     Boolean   @default(true)
+  isArchived   Boolean   @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  projectsResponsible Project[]            @relation("ResponsibleUser")
+  projectMemberships  ProjectMember[]
+  assignedTasks       Task[]               @relation("AssignedUser")
+  meetingAttendances  MeetingParticipant[]
+  statusChanges       ApplicationStatusHistory[]
+  auditLogs           AuditLog[]
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique // SYSTEM_ADMIN, MANAGER, STAFF, READONLY
+  label       String   // "Sistem Yöneticisi", "Müdür", "Personel", "Salt Okunur"
+  permissions String   @default("[]") // JSON string of permission keys
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id                 String    @id @default(cuid())
+  code               String    @unique // e.g. "OGZ-INT-FOODTRAILS"
+  name               String
+  category           String    // INTERNATIONAL, NATIONAL, CORPORATE, INTERNAL
+  description        String?
+  objectives         String?
+  fundingProgramId   String?
+  fundingProgram     FundingProgram? @relation(fields: [fundingProgramId], references: [id])
+  coordinatorOrg     String?   // Koordinatör Kurum Adı
+  responsibleUserId  String?
+  responsibleUser    User?     @relation("ResponsibleUser", fields: [responsibleUserId], references: [id])
+  municipalUnit      String?   // Fen İşleri, Gençlik Spor, Afet İşleri, vb.
+  startDate          DateTime?
+  endDate            DateTime?
+  budgetAmount       Float?
+  currency           String    @default("EUR") // EUR, TRY, USD
+  fixedExchangeRate  Float?
+  budgetNotes        String?
+  phase              String    @default("PREPARATION") // IDEA, PREPARATION, SUBMITTED, APPROVED, ACTIVE, COMPLETED, ARCHIVED
+  isArchived         Boolean   @default(false)
+  deletedAt          DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  members      ProjectMember[]
+  partnerships Partnership[]
+  applications Application[]
+  tasks        Task[]
+  meetings     Meeting[]
+  documents    Document[]
+}
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleTitle String?  // "Proje Yöneticisi", "Araştırmacı", "Tasarım Sorumlusu"
+  createdAt DateTime @default(now())
+
+  @@unique([projectId, userId])
+}
+
+model FundingProgram {
+  id              String          @id @default(cuid())
+  name            String          // Horizon Europe, BEBKA, TÜBİTAK, Erasmus+
+  code            String?         // HORIZON-EU, BEBKA, TUBITAK
+  provider        String?         // Avrupa Komisyonu, Sanayi ve Teknoloji Bakanlığı
+  parentProgramId String?
+  parentProgram   FundingProgram? @relation("ProgramHierarchy", fields: [parentProgramId], references: [id])
+  subPrograms     FundingProgram[] @relation("ProgramHierarchy")
+  calls           FundingCall[]
+  projects        Project[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model FundingCall {
+  id               String         @id @default(cuid())
+  fundingProgramId String
+  fundingProgram   FundingProgram @relation(fields: [fundingProgramId], references: [id])
+  title            String
+  callCode         String?        // e.g. "EU-HORIZON-CL3-2026-01-DRS-01"
+  deadline         DateTime?
+  budgetInfo       String?
+  eligibility      String?
+  sourceUrl        String?
+  notes            String?
+  applications     Application[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model Application {
+  id                String    @id @default(cuid())
+  projectId         String?
+  project           Project?  @relation(fields: [projectId], references: [id])
+  fundingCallId     String?
+  fundingCall       FundingCall? @relation(fields: [fundingCallId], references: [id])
+  type              String    @default("PROJECT_CALL") // PROJECT_CALL, PROGRAM_APPLICATION, NETWORK_MEMBERSHIP, AWARD_COMPETITION
+  applicationDate   DateTime?
+  applicationNumber String?
+  applicantRole     String?   @default("PARTNER") // COORDINATOR, PARTNER, SOLE_APPLICANT
+  requestedGrant    Float?
+  currency          String    @default("EUR")
+  status            String    @default("SUBMITTED") // DRAFT, PREPARING, REVIEWING, SUBMITTED, EVALUATING, ACCEPTED, REJECTED, WITHDRAWN
+  resultDate        DateTime?
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  statusHistory ApplicationStatusHistory[]
+  documents     Document[]
+}
+
+model ApplicationStatusHistory {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStatus    String?
+  toStatus      String
+  changedById   String?
+  changedBy     User?       @relation(fields: [changedById], references: [id])
+  note          String?
+  createdAt     DateTime    @default(now())
+}
+
+model Country {
+  id            String         @id @default(cuid())
+  name          String         // Türkiye, Almanya, İtalya, Hollanda
+  nameEn        String         // Turkey, Germany, Italy, Netherlands
+  code          String         @unique // TR, DE, IT, NL
+  flagEmoji     String?
+  organizations Organization[]
+  createdAt     DateTime       @default(now())
+}
+
+model Organization {
+  id           String        @id @default(cuid())
+  name         String        // TU Delft, TUM, Politecnico di Torino, AFAD
+  type         String        @default("UNIVERSITY") // UNIVERSITY, MUNICIPALITY, NGO, PRIVATE, AGENCY, RESEARCH
+  city         String?
+  countryId    String
+  country      Country       @relation(fields: [countryId], references: [id])
+  expertise    String?
+  contactInfo  String?
+  partnerships Partnership[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Partnership {
+  id             String       @id @default(cuid())
+  projectId      String
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  role           String       @default("PARTNER") // COORDINATOR, PARTNER, ASSOCIATE
+  status         String       @default("ACTIVE")
+  createdAt      DateTime     @default(now())
+
+  @@unique([projectId, organizationId])
+}
+
+model NetworkMembership {
+  id          String   @id @default(cuid())
+  name        String   // Eurocities, UNESCO, CIVITAS, UCLG-MEWA
+  description String?
+  joinedYear  Int?
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+}
+
+model Task {
+  id             String    @id @default(cuid())
+  title          String
+  description    String?
+  projectId      String?
+  project        Project?  @relation(fields: [projectId], references: [id])
+  assignedUserId String?
+  assignedUser   User?     @relation("AssignedUser", fields: [assignedUserId], references: [id])
+  priority       String    @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  status         String    @default("TODO") // TODO, IN_PROGRESS, REVIEW, DONE, CANCELLED
+  dueDate        DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Meeting {
+  id           String               @id @default(cuid())
+  title        String
+  type         String               @default("ONLINE") // ONLINE, IN_PERSON, HYBRID
+  date         DateTime
+  projectId    String?
+  project      Project?             @relation(fields: [projectId], references: [id])
+  agenda       String?
+  minutes      String?
+  decisions    String?
+  participants MeetingParticipant[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+}
+
+model MeetingParticipant {
+  id        String   @id @default(cuid())
+  meetingId String
+  meeting   Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([meetingId, userId])
+}
+
+model Activity {
+  id          String    @id @default(cuid())
+  title       String
+  type        String    // WORKSHOP, FIELDWORK, CONFERENCE, CITIZEN_ENGAGEMENT
+  date        DateTime
+  location    String?
+  description String?
+  createdAt   DateTime  @default(now())
+}
+
+model Document {
+  id            String       @id @default(cuid())
+  name          String
+  type          String       @default("OTHER") // CONTRACT, REPORT, PROPOSAL, GA_AMENDMENT
+  filePath      String
+  version       String       @default("v1.0")
+  projectId     String?
+  project       Project?     @relation(fields: [projectId], references: [id])
+  applicationId String?
+  application   Application? @relation(fields: [applicationId], references: [id])
+  createdAt     DateTime     @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String   // LOGIN, CREATE, UPDATE, DELETE, FORBIDDEN
+  entity    String   // Project, User, Application
+  entityId  String?
+  oldValue  String?
+  newValue  String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model HistoricalSnapshot {
+  id                  String   @id @default(cuid())
+  periodLabel         String   // "2023-2024 Sunum Göstergeleri"
+  totalApplications   Int
+  partnerCountries    Int
+  projectPartners     Int
+  onlineMeetings      Int
+  inPersonMeetings    Int
+  totalGrantRequested Float
+  currency            String   @default("EUR")
+  note                String?
+  createdAt           DateTime @default(now())
+}
