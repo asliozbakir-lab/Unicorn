@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="susa-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0092bc"/>
+      <stop offset="50%" stop-color="#e4002b"/>
+      <stop offset="100%" stop-color="#009a44"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <circle cx="60" cy="60" r="54" fill="#ffffff" stroke="#0092bc" stroke-width="3"/>
+  <circle cx="60" cy="60" r="48" fill="url(#susa-bg)" opacity="0.12"/>
+  <!-- Castle Fortress -->
+  <path d="M35 75 L35 55 L42 55 L42 60 L48 60 L48 55 L55 55 L55 60 L65 60 L65 55 L72 55 L72 60 L78 60 L78 55 L85 55 L85 75 Z" fill="#176C55" filter="url(#shadow)"/>
+  <!-- Arch Gate -->
+  <path d="M52 75 A8 8 0 0 1 68 75 Z" fill="#ffffff"/>
+  <!-- Kharibulbul Flower -->
+  <path d="M60 30 C55 38 45 42 52 50 C58 45 62 45 68 50 C75 42 65 38 60 30 Z" fill="#e4002b"/>
+  <!-- Text -->
+  <text x="60" y="92" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="800" font-size="11" fill="#176C55" letter-spacing="1">ŞUŞA</text>
+  <text x="60" y="103" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="600" font-size="7" fill="#64748b">AZƏRBAYCAN</text>
+</svg>

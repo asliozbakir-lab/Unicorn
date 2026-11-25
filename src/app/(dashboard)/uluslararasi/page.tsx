@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { Globe2, Building2, MapPin, Award, Building, Calendar, HeartHandshake } from "lucide-react";
 import { NewSisterCityModal } from "@/components/international/NewSisterCityModal";
 import { NewUnionModal } from "@/components/international/NewUnionModal";
+import { SisterCityCard } from "@/components/international/SisterCityCard";
 
 export default async function InternationalRelationsPage() {
   const [sisterCities, unions, countries, organizations] = await Promise.all([
@@ -91,57 +92,7 @@ export default async function InternationalRelationsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sisterCities.map((city) => (
-            <div
-              key={city.id}
-              className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 hover:bg-white hover:shadow-md transition flex flex-col justify-between space-y-3"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{city.flagEmoji || "🌐"}</span>
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-900">{city.cityName}</h3>
-                      <p className="text-[11px] text-slate-500">{city.countryName}</p>
-                    </div>
-                  </div>
-                  {city.protocolDate && (
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600">
-                      Protokol: {city.protocolDate}
-                    </span>
-                  )}
-                </div>
-
-                {city.scope && (
-                  <div className="text-xs text-[#176C55] font-medium bg-[#176C55]/5 p-2 rounded-lg border border-[#176C55]/10 mt-2">
-                    <span className="font-bold block text-[10px] uppercase text-[#176C55]">İş Birliği Alanı:</span>
-                    {city.scope}
-                  </div>
-                )}
-
-                {city.notes && (
-                  <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                    {city.notes}
-                  </p>
-                )}
-              </div>
-
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-emerald-700 font-semibold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Aktif İlişki
-                </span>
-                {city.logoUrl && (
-                  <a
-                    href={city.logoUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[#176C55] hover:underline font-medium text-[10px]"
-                  >
-                    Resmî Arma Görseli ↗
-                  </a>
-                )}
-              </div>
-            </div>
+            <SisterCityCard key={city.id} city={city} />
           ))}
         </div>
       </div>

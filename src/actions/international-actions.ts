@@ -43,6 +43,61 @@ export async function createSisterCityAction(formData: FormData) {
   }
 }
 
+export async function updateSisterCityAction(id: string, formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Oturum açmanız gerekiyor." };
+
+  const cityName = formData.get("cityName") as string;
+  const countryName = formData.get("countryName") as string;
+  const countryCode = (formData.get("countryCode") as string) || null;
+  const flagEmoji = (formData.get("flagEmoji") as string) || "🌐";
+  const protocolDate = (formData.get("protocolDate") as string) || null;
+  const scope = (formData.get("scope") as string) || null;
+  const notes = (formData.get("notes") as string) || null;
+  const logoUrl = (formData.get("logoUrl") as string) || null;
+
+  if (!cityName || !countryName) {
+    return { error: "Şehir adı ve ülke adı zorunludur." };
+  }
+
+  try {
+    await prisma.sisterCity.update({
+      where: { id },
+      data: {
+        cityName,
+        countryName,
+        countryCode,
+        flagEmoji,
+        protocolDate,
+        scope,
+        notes,
+        logoUrl,
+      },
+    });
+
+    revalidatePath("/uluslararasi");
+    return { success: true };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}
+
+export async function deleteSisterCityAction(id: string) {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Oturum açmanız gerekiyor." };
+
+  try {
+    await prisma.sisterCity.delete({
+      where: { id },
+    });
+
+    revalidatePath("/uluslararasi");
+    return { success: true };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}
+
 export async function createUnionAction(formData: FormData) {
   const user = await getCurrentUser();
   if (!user) return { error: "Oturum açmanız gerekiyor." };
@@ -63,6 +118,22 @@ export async function createUnionAction(formData: FormData) {
         joinedYear,
         status: "ACTIVE",
       },
+    });
+
+    revalidatePath("/uluslararasi");
+    return { success: true };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}
+
+export async function deleteUnionAction(id: string) {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Oturum açmanız gerekiyor." };
+
+  try {
+    await prisma.networkMembership.delete({
+      where: { id },
     });
 
     revalidatePath("/uluslararasi");

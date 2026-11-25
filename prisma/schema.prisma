@@ -250,8 +250,12 @@ model Activity {
 model Document {
   id            String       @id @default(cuid())
   name          String
-  type          String       @default("OTHER") // CONTRACT, REPORT, PROPOSAL, GA_AMENDMENT
+  type          String       @default("OTHER") // CONTRACT, REPORT, PROPOSAL, GA_AMENDMENT, GOOGLE_SHEET, GOOGLE_DOC, GOOGLE_SLIDES, GOOGLE_DRIVE_FOLDER
   filePath      String
+  driveUrl      String?
+  category      String       @default("GENERAL") // GOOGLE_DRIVE, CONTRACT, REPORT, PRESENTATION
+  description   String?
+  uploadedBy    String?
   version       String       @default("v1.0")
   projectId     String?
   project       Project?     @relation(fields: [projectId], references: [id])

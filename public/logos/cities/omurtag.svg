@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <circle cx="60" cy="60" r="54" fill="#ffffff" stroke="#b91c1c" stroke-width="3"/>
+  <!-- Lion & Crown -->
+  <path d="M40 38 L80 38 C80 68 60 84 60 84 C60 84 40 68 40 38 Z" fill="#b91c1c"/>
+  <circle cx="60" cy="52" r="12" fill="#fbbf24"/>
+  <path d="M52 50 L60 42 L68 50 L65 62 L55 62 Z" fill="#ffffff"/>
+  <text x="60" y="98" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="800" font-size="10" fill="#b91c1c" letter-spacing="1">OMURTAG</text>
+  <text x="60" y="108" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="600" font-size="7" fill="#64748b">BULGARİSTAN</text>
+</svg>
