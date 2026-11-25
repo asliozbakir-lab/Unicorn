@@ -1,0 +1,176 @@
+"use client";
+
+import { useState } from "react";
+import { Plus, X, Globe2, Building } from "lucide-react";
+import { createSisterCityAction } from "@/actions/international-actions";
+
+export function NewSisterCityModal() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const res = await createSisterCityAction(formData);
+
+    if (res?.error) {
+      setError(res.error);
+      setLoading(false);
+    } else {
+      setLoading(false);
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#176C55] hover:bg-[#125845] text-white text-xs font-semibold shadow-xs transition"
+      >
+        <Plus className="w-4 h-4" />
+        <span>Yeni Kardeş Şehir Ekle</span>
+      </button>
+
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Yeni Kardeş Şehir Ekle</h3>
+                <p className="text-xs text-slate-500">Osmangazi Belediyesi Kardeş Şehir Protokol Kaydı</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              {error && (
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
+                  {error}
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Şehir Adı *
+                  </label>
+                  <input
+                    type="text"
+                    name="cityName"
+                    required
+                    placeholder="Örn: Şuşa"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Ülke Adı *
+                  </label>
+                  <input
+                    type="text"
+                    name="countryName"
+                    required
+                    placeholder="Örn: Azerbaycan"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Bayrak / Simge (Emoji)
+                  </label>
+                  <input
+                    type="text"
+                    name="flagEmoji"
+                    placeholder="🇦🇿 veya 🌐"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Protokol Yılı / Tarihi
+                  </label>
+                  <input
+                    type="text"
+                    name="protocolDate"
+                    placeholder="Örn: 2022"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  İş Birliği Kapsamı & Alanları
+                </label>
+                <input
+                  type="text"
+                  name="scope"
+                  placeholder="Kültür, Tarihi Miras, Gençlik, Turizm..."
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  Logo / Arma Görsel Bağlantısı (URL)
+                </label>
+                <input
+                  type="url"
+                  name="logoUrl"
+                  placeholder="https://.../sehir-armasi.png"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  Notlar & Açıklama
+                </label>
+                <textarea
+                  name="notes"
+                  rows={2}
+                  placeholder="Protokol detayları, meclis kararı..."
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition"
+                >
+                  Vazgeç
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-5 py-2 rounded-xl bg-[#176C55] hover:bg-[#125845] text-white text-xs font-semibold shadow-xs transition disabled:opacity-50"
+                >
+                  {loading ? "Kaydediliyor..." : "Kardeş Şehri Kaydet"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

@@ -15,7 +15,7 @@ import {
   Bot,
   Settings,
   Building2,
-  ChevronRight,
+  Landmark,
 } from "lucide-react";
 import { SessionUser } from "@/types";
 
@@ -28,6 +28,12 @@ export function Sidebar({ user }: SidebarProps) {
 
   const navItems = [
     { label: "Genel Bakış", href: "/", icon: LayoutDashboard },
+    {
+      label: "700. Yıl Panelleri",
+      href: "/fethi-700-paneller",
+      icon: Landmark,
+      badge: "Fetih 1326",
+    },
     {
       label: "Proje Yönetimi",
       href: "/projeler",
@@ -46,7 +52,7 @@ export function Sidebar({ user }: SidebarProps) {
       label: "Uluslararası İlişkiler",
       href: "/uluslararasi",
       icon: Globe2,
-      badge: "35 Ülke",
+      badge: "Kardeş Şehirler",
     },
     { label: "Görev ve İş Takibi", href: "/gorevler", icon: CheckSquare },
     { label: "Toplantı ve Faaliyetler", href: "/toplantilar", icon: Users2 },

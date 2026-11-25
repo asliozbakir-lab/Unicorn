@@ -286,3 +286,35 @@ model HistoricalSnapshot {
   note                String?
   createdAt           DateTime @default(now())
 }
+
+model SisterCity {
+  id           String    @id @default(cuid())
+  cityName     String
+  countryName  String
+  countryCode  String?
+  logoUrl      String?
+  flagEmoji    String?
+  protocolDate String?
+  scope        String?
+  notes        String?
+  status       String    @default("ACTIVE")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model ConquestPanel {
+  id             String    @id @default(cuid())
+  title          String
+  institution    String
+  contactPerson  String?
+  moderator      String?
+  panelists      String?
+  date           String?
+  location       String?
+  contactInfo    String?
+  notes          String?
+  planningStatus String    @default("PLANNING")
+  dataCollection String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
