@@ -54,17 +54,34 @@ export function DocumentCard({ doc }: DocumentProps) {
   const getDocBadge = (type: string) => {
     switch (type) {
       case "GOOGLE_SHEET":
-        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">Google E-Tablo</span>;
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">E-Tablo</span>;
       case "GOOGLE_DOC":
-        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">Google Doküman</span>;
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">Doküman</span>;
       case "GOOGLE_SLIDES":
-        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">Google Slayt</span>;
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">Slayt</span>;
       case "GOOGLE_DRIVE_FOLDER":
         return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200">Drive Klasörü</span>;
       case "CONTRACT":
-        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">Hibe Sözleşmesi</span>;
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">Sözleşme</span>;
+      case "REPORT":
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">Rapor / PDF</span>;
       default:
         return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">Belge</span>;
+    }
+  };
+
+  const getCategoryBadge = (category: string) => {
+    switch (category) {
+      case "CONQUEST_700":
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">700. Yıl</span>;
+      case "INTERNATIONAL":
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">Dış İlişkiler</span>;
+      case "GRANTS_PROJECTS":
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-[#176C55] border border-emerald-200">Ar-Ge & Hibe</span>;
+      case "CORPORATE_PUBLIC":
+        return <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">Kurumsal</span>;
+      default:
+        return null;
     }
   };
 
@@ -90,7 +107,8 @@ export function DocumentCard({ doc }: DocumentProps) {
                 <h3 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2">
                   {doc.name}
                 </h3>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                  {getCategoryBadge(doc.category)}
                   {getDocBadge(doc.type)}
                   <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-1.5 py-0.2 rounded border border-slate-200">
                     {doc.version}

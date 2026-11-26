@@ -124,13 +124,13 @@ export function NewDriveDocModal() {
                   </label>
                   <select
                     name="category"
-                    defaultValue="GOOGLE_DRIVE"
+                    defaultValue="CONQUEST_700"
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#176C55] focus:bg-white transition"
                   >
-                    <option value="GOOGLE_DRIVE">Google Drive Arşivi</option>
-                    <option value="CONTRACT">Sözleşmeler ve Hukuk</option>
-                    <option value="REPORT">Raporlar ve Analizler</option>
-                    <option value="PRESENTATION">Sunumlar ve Tanıtım</option>
+                    <option value="CONQUEST_700">🏛️ 700. Yıl & Fetih Panelleri</option>
+                    <option value="INTERNATIONAL">🌐 Dış İlişkiler & Kardeş Şehirler</option>
+                    <option value="GRANTS_PROJECTS">💡 Ar-Ge Projeleri & Fonlar</option>
+                    <option value="CORPORATE_PUBLIC">🏢 Kurumsal Yönetim & Tanıtım</option>
                   </select>
                 </div>
               </div>
