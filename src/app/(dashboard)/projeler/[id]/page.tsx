@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { formatCurrency, formatDate, CATEGORY_LABELS, PHASE_LABELS } from "@/lib/utils";
 import { ArchiveProjectButton } from "@/components/projects/ArchiveProjectButton";
+import { ProjectPrintButton } from "@/components/projects/ProjectPrintButton";
+import type { ExportProjectData } from "@/lib/export-utils";
 
 interface ProjectDetailPageProps {
   params: Promise<{ id: string }>;
@@ -57,21 +59,51 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const ph = PHASE_LABELS[project.phase] || PHASE_LABELS.ACTIVE;
   const canArchive = canArchiveProject(user);
 
+  const exportData: ExportProjectData = {
+    id: project.id,
+    code: project.code,
+    name: project.name,
+    category: project.category,
+    phase: project.phase,
+    budgetAmount: project.budgetAmount,
+    currency: project.currency,
+    coordinatorOrg: project.coordinatorOrg,
+    municipalUnit: project.municipalUnit,
+    description: project.description,
+    objectives: project.objectives,
+    startDate: project.startDate ? project.startDate.toISOString() : null,
+    endDate: project.endDate ? project.endDate.toISOString() : null,
+    responsibleUserName: project.responsibleUser?.name || null,
+    responsibleUserTitle: project.responsibleUser?.title || null,
+    fundingProgramName: project.fundingProgram?.name || null,
+    fundingProgramProvider: project.fundingProgram?.provider || null,
+    partnerships: project.partnerships.map((p) => ({
+      organizationName: p.organization.name,
+      countryName: p.organization.country.name,
+      type: p.organization.type,
+      role: p.role,
+    })),
+    tasksCount: project.tasks.length,
+  };
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Üst Navigasyon */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/projeler"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#176C55] transition"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#0B4F3A] transition"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Tüm Projelere Dön</span>
         </Link>
 
-        {canArchive && (
-          <ArchiveProjectButton projectId={project.id} />
-        )}
+        <div className="flex items-center gap-2.5">
+          <ProjectPrintButton project={exportData} />
+          {canArchive && (
+            <ArchiveProjectButton projectId={project.id} />
+          )}
+        </div>
       </div>
 
       {/* Proje Başlık Kartı */}

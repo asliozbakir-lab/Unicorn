@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import Link from "next/link";
-import { Plus, Search, FolderKanban, ArrowUpRight, Building2, User, Coins } from "lucide-react";
+import { Plus, FolderKanban, ArrowUpRight, Printer } from "lucide-react";
 import { formatCurrency, CATEGORY_LABELS, PHASE_LABELS } from "@/lib/utils";
 import { canCreateProject } from "@/lib/permissions";
+import { ProjectPrintButton } from "@/components/projects/ProjectPrintButton";
+import type { ExportProjectData } from "@/lib/export-utils";
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -36,8 +38,9 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
     where: whereClause,
     include: {
       responsibleUser: true,
-      partnerships: { include: { organization: true } },
+      partnerships: { include: { organization: { include: { country: true } } } },
       fundingProgram: true,
+      tasks: true,
     },
     orderBy: { createdAt: "desc" },
   });
@@ -54,24 +57,34 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
 
   return (
     <div className="space-y-6">
-      {/* Üst Başlık ve Yeni Ekle */}
+      {/* Üst Başlık ve Yeni Ekle / Toplu Çıktı */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Proje Yönetimi</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            Müdürlüğün 4 ana kategorideki tüm projelerinin portföyü ve operasyonel takibi
+            Müdürlüğün 4 ana kategorideki tüm projelerinin portföyü, özet çıktıları ve operasyonel takibi
           </p>
         </div>
 
-        {canAdd && (
+        <div className="flex flex-wrap items-center gap-2.5">
           <Link
-            href="/projeler/yeni"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#176C55] hover:bg-[#125845] text-white text-xs font-semibold shadow-sm transition"
+            href={kategori ? `/raporlar?kategori=${kategori}` : "/raporlar"}
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-[#0B4F3A]/30 bg-white hover:bg-[#0B4F3A]/5 text-[#0B4F3A] text-xs font-bold shadow-2xs transition"
           >
-            <Plus className="w-4 h-4" />
-            <span>Yeni Proje Kaydı</span>
+            <Printer className="w-4 h-4" />
+            <span>Toplu Çıktı / Rapor Al</span>
           </Link>
-        )}
+
+          {canAdd && (
+            <Link
+              href="/projeler/yeni"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#0B4F3A] hover:bg-[#083c2c] text-white text-xs font-semibold shadow-sm transition"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Yeni Proje Kaydı</span>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Kategori Filtre Sekmeleri */}
@@ -84,7 +97,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               href={c.key ? `/projeler?kategori=${c.key}` : "/projeler"}
               className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
                 isActive
-                  ? "bg-[#176C55] text-white shadow-xs"
+                  ? "bg-[#0B4F3A] text-white shadow-xs"
                   : "text-slate-600 hover:bg-slate-200/60"
               }`}
             >
@@ -107,10 +120,37 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
             const cat = CATEGORY_LABELS[proj.category] || CATEGORY_LABELS.INTERNATIONAL;
             const ph = PHASE_LABELS[proj.phase] || PHASE_LABELS.ACTIVE;
 
+            const exportData: ExportProjectData = {
+              id: proj.id,
+              code: proj.code,
+              name: proj.name,
+              category: proj.category,
+              phase: proj.phase,
+              budgetAmount: proj.budgetAmount,
+              currency: proj.currency,
+              coordinatorOrg: proj.coordinatorOrg,
+              municipalUnit: proj.municipalUnit,
+              description: proj.description,
+              objectives: proj.objectives,
+              startDate: proj.startDate ? proj.startDate.toISOString() : null,
+              endDate: proj.endDate ? proj.endDate.toISOString() : null,
+              responsibleUserName: proj.responsibleUser?.name || null,
+              responsibleUserTitle: proj.responsibleUser?.title || null,
+              fundingProgramName: proj.fundingProgram?.name || null,
+              fundingProgramProvider: proj.fundingProgram?.provider || null,
+              partnerships: proj.partnerships.map((p) => ({
+                organizationName: p.organization.name,
+                countryName: p.organization.country.name,
+                type: p.organization.type,
+                role: p.role,
+              })),
+              tasksCount: proj.tasks.length,
+            };
+
             return (
               <div
                 key={proj.id}
-                className="bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition flex flex-col justify-between overflow-hidden group"
+                className="bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition flex flex-col justify-between overflow-hidden group osmangazi-card"
               >
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -124,7 +164,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
 
                   <Link
                     href={`/projeler/${proj.id}`}
-                    className="text-base font-bold text-slate-900 group-hover:text-[#176C55] transition line-clamp-1"
+                    className="text-base font-bold text-slate-900 group-hover:text-[#0B4F3A] transition line-clamp-1"
                   >
                     {proj.name}
                   </Link>
@@ -158,7 +198,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                     {proj.partnerships.length > 0 && (
                       <div className="flex items-center justify-between">
                         <span className="text-slate-400 text-[11px]">Ortaklar:</span>
-                        <span className="text-[#176C55] font-semibold text-[11px]">
+                        <span className="text-[#0B4F3A] font-semibold text-[11px]">
                           {proj.partnerships.length} Kurum
                         </span>
                       </div>
@@ -166,17 +206,20 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   </div>
                 </div>
 
-                <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400">
+                <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <span className="text-[11px] text-slate-400 truncate">
                     {proj.fundingProgram?.name || proj.municipalUnit || "Osmangazi Ar-Ge"}
                   </span>
-                  <Link
-                    href={`/projeler/${proj.id}`}
-                    className="text-xs font-semibold text-[#176C55] hover:text-[#125845] flex items-center gap-1 transition"
-                  >
-                    <span>Detay</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <ProjectPrintButton project={exportData} compact />
+                    <Link
+                      href={`/projeler/${proj.id}`}
+                      className="text-xs font-semibold text-[#0B4F3A] hover:text-[#083c2c] flex items-center gap-1 transition"
+                    >
+                      <span>Detay</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             );

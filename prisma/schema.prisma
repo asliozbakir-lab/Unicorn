@@ -110,6 +110,12 @@ model FundingCall {
   eligibility      String?
   sourceUrl        String?
   notes            String?
+  triageStatus     String         @default("NEW") // NEW, SHORTLISTED, DEFERRED, DISMISSED, APPLIED
+  triageReason     String?
+  triageBy         String?
+  triageAt         DateTime?
+  qualityGate      String         @default("G1")  // G0, G1, G2, G3, G4, G5
+  track            String         @default("HAT_A") // HAT_A, HAT_B, HAT_C
   applications     Application[]
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt

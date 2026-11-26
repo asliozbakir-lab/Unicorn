@@ -22,13 +22,13 @@ export function DashboardCharts({ categoryData, phaseData }: ChartsProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
       {/* Kategori Dağılımı */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm osmangazi-card">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-sm font-bold text-slate-900">Proje Kategorileri Dağılımı</h3>
             <p className="text-xs text-slate-500">4 ana stratejik alandaki proje portföyü</p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#176C55]/10 text-[#176C55]">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#0B4F3A]/10 text-[#0B4F3A]">
             Canlı Veritabanı
           </span>
         </div>
@@ -63,13 +63,13 @@ export function DashboardCharts({ categoryData, phaseData }: ChartsProps) {
       </div>
 
       {/* Proje Aşamaları Çubuk Grafiği */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm osmangazi-card">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-sm font-bold text-slate-900">Uygulama Aşamaları</h3>
             <p className="text-xs text-slate-500">Hazırlık, başvuru, aktif ve tamamlanan projeler</p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#839B24]/15 text-[#839B24]">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#7A9A3B]/15 text-[#7A9A3B]">
             Durum Analizi
           </span>
         </div>
@@ -83,7 +83,7 @@ export function DashboardCharts({ categoryData, phaseData }: ChartsProps) {
                 formatter={(value: any) => [`${value} Proje`, "Sayı"]}
                 contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0" }}
               />
-              <Bar dataKey="count" fill="#176C55" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="count" fill="#0B4F3A" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

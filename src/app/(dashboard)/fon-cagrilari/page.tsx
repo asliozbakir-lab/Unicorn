@@ -23,14 +23,20 @@ export default async function FundingCallsPage() {
     id: c.id,
     title: c.title,
     callCode: c.callCode,
-    deadline: c.deadline,
+    deadline: c.deadline ? c.deadline.toISOString() : null,
     budgetInfo: c.budgetInfo,
     eligibility: c.eligibility,
     sourceUrl: c.sourceUrl,
     notes: c.notes,
-    programName: c.fundingProgram?.name,
-    programCode: c.fundingProgram?.code || undefined,
+    triageStatus: c.triageStatus,
+    triageReason: c.triageReason,
+    triageBy: c.triageBy,
+    triageAt: c.triageAt ? c.triageAt.toISOString() : null,
+    qualityGate: c.qualityGate,
+    track: c.track,
+    programName: c.fundingProgram?.name || "Fon Programı",
+    programCode: c.fundingProgram?.code || null,
   }));
 
-  return <FundingRadarView programs={programs} allCalls={serializedCalls} />;
+  return <FundingRadarView programs={programs} initialCalls={serializedCalls} />;
 }

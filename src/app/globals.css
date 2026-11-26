@@ -1,58 +1,188 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+
 @layer base {
   :root {
-    --background: 140 10% 97%; /* #F7F9F8 */
-    --foreground: 240 28% 15%; /* #1A1A2E */
-    --card: 0 0% 100%; /* #FFFFFF */
-    --card-foreground: 240 28% 15%;
+    --background: 150 12% 96%; /* #F5F7F6 */
+    --foreground: 155 23% 10%; /* #14201B */
+    --card: 0 0% 100%;
+    --card-foreground: 155 23% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 28% 15%;
-    --primary: 164 65% 26%; /* #176C55 Koyu Yeşil */
+    --popover-foreground: 155 23% 10%;
+    --primary: 161 76% 18%; /* #0B4F3A Osmangazi Koyu Zümrüt */
     --primary-foreground: 0 0% 100%;
-    --secondary: 72 62% 37%; /* #839B24 Zeytin Yeşili */
+    --secondary: 80 45% 42%; /* #7A9A3B Çınar Yeşili */
     --secondary-foreground: 0 0% 100%;
     --muted: 150 10% 92%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 72 62% 92%;
-    --accent-foreground: 164 65% 26%;
-    --destructive: 0 84% 60%;
+    --muted-foreground: 155 10% 42%;
+    --accent: 80 45% 92%;
+    --accent-foreground: 161 76% 18%;
+    --destructive: 358 75% 48%; /* #D61F26 Bursa'nın Kalbi Kırmızısı */
     --destructive-foreground: 0 0% 100%;
-    --border: 150 10% 88%;
-    --input: 150 10% 88%;
-    --ring: 164 65% 26%;
+    --border: 150 12% 88%;
+    --input: 150 12% 88%;
+    --ring: 161 76% 18%;
     --radius: 0.75rem;
+
+    /* Kurumsal Kimlik Tokenları */
+    --osmangazi-forest: #0B4F3A;
+    --osmangazi-emerald: #176C55;
+    --osmangazi-cinar: #7A9A3B;
+    --osmangazi-heart: #D61F26;
+    --osmangazi-gold: #C5A059;
+    --osmangazi-canvas: #F5F7F6;
+
+    accent-color: #0B4F3A;
+    scrollbar-color: #94a3b8 #f1f5f9;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, #0B4F3A 20%, white);
+    color: #0B4F3A;
+  }
+
+  input:not([type="range"]):user-invalid,
+  textarea:user-invalid,
+  select:user-invalid {
+    border-color: #D61F26;
+  }
+
+  input:not([type="range"]):user-valid,
+  textarea:user-valid {
+    border-color: #0B4F3A;
   }
 }
 
 body {
-  background-color: #F7F9F8;
-  color: #1A1A2E;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--osmangazi-canvas);
+  color: #14201B;
   min-height: 100vh;
+}
+
+/* Native <dialog> Top-Layer & Reduced Motion Standartları */
+dialog:modal {
+  overscroll-behavior: contain;
+  max-height: calc(100dvh - 2rem);
+  max-width: calc(100vw - 2rem);
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgba(11, 29, 23, 0.56);
+  backdrop-filter: blur(4px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog {
+    transition:
+      opacity 0.18s ease-out,
+      transform 0.18s ease-out,
+      display 0.18s allow-discrete,
+      overlay 0.18s allow-discrete;
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+
+  dialog[open] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  @starting-style {
+    dialog[open] {
+      opacity: 0;
+      transform: translateY(6px) scale(0.985);
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .osmangazi-card,
+  dialog[open] {
+    border: 1px solid CanvasText;
+  }
 }
 
 /* Kurumsal Yardımcı Sınıflar */
 .bg-osmangazi-dark {
-  background-color: #176C55;
+  background-color: #0B4F3A;
 }
 
 .text-osmangazi-dark {
-  color: #176C55;
+  color: #0B4F3A;
 }
 
 .bg-osmangazi-olive {
-  background-color: #839B24;
+  background-color: #7A9A3B;
 }
 
 .text-osmangazi-olive {
-  color: #839B24;
+  color: #7A9A3B;
 }
 
 .border-osmangazi-dark {
-  border-color: #176C55;
+  border-color: #0B4F3A;
 }
 
 .border-osmangazi-olive {
-  border-color: #839B24;
+  border-color: #7A9A3B;
+}
+
+/* A4 Baskı / PDF Çıktı Stüdyosu Kuralları */
+@page {
+  size: A4 portrait;
+  margin: 18mm;
+}
+
+@page official-memo {
+  size: A4 portrait;
+  margin: 25mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .no-print,
+  aside,
+  header,
+  dialog:not([open]) {
+    display: none !important;
+  }
+
+  body.printing-sheet > *:not(#print-sheet-portal) {
+    display: none !important;
+  }
+
+  body.printing-sheet #print-sheet-portal {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .print-official-memo {
+    page: official-memo;
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 12pt !important;
+    line-height: 1.15 !important;
+    color: #000000 !important;
+  }
+
+  .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
 }

@@ -21,6 +21,8 @@ import {
   Target,
   Compass,
   FileText,
+  Printer,
+  Sparkles,
 } from "lucide-react";
 import { formatCurrency, CATEGORY_LABELS, PHASE_LABELS } from "@/lib/utils";
 import { canCreateProject } from "@/lib/permissions";
@@ -38,6 +40,8 @@ export default async function DashboardPage() {
     totalOrgs,
     projects,
     snapshots,
+    pendingCallsCount,
+    shortlistedCallsCount,
   ] = await Promise.all([
     prisma.project.count({ where: { deletedAt: null } }),
     prisma.project.count({ where: { phase: "ACTIVE", deletedAt: null } }),
@@ -49,6 +53,8 @@ export default async function DashboardPage() {
       orderBy: { createdAt: "desc" },
     }),
     prisma.historicalSnapshot.findMany({ orderBy: { createdAt: "asc" } }),
+    prisma.fundingCall.count({ where: { triageStatus: "NEW" } }),
+    prisma.fundingCall.count({ where: { triageStatus: "SHORTLISTED" } }),
   ]);
 
   // Bütçe Hesaplamaları (EUR ve TRY ayrı!)
@@ -93,26 +99,79 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Üst Karşılama ve Hızlı Eylem */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-            Hoş Geldiniz, {user?.name} 👋
-          </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
-            Osmangazi Belediyesi Ar-Ge Müdürlüğü Proje ve Hibe Yönetim Portalı
-          </p>
-        </div>
+      {/* Kurumsal Karşılama Hero Alanı */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B4F3A] via-[#0E5C44] to-[#176C55] text-white p-6 sm:p-8 shadow-md">
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-3/5 opacity-15 bg-no-repeat bg-right bg-cover mix-blend-luminosity"
+          style={{ backgroundImage: "url('/brand/bursa-kalbi-banner.png')" }}
+        />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="flex items-start sm:items-center gap-4">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-2 flex items-center justify-center shrink-0 shadow-lg">
+              <img
+                src="/brand/osmangazi-logo.png"
+                alt="Osmangazi Belediyesi Logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold text-emerald-200 mb-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#D61F26]" />
+                <span>Bursa&apos;nın Kalbi • 700 Yıldır Buradayız</span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">
+                Hoş Geldiniz, {user?.name}
+              </h1>
+              <p className="text-xs sm:text-sm text-emerald-100/85 mt-0.5">
+                Osmangazi Belediyesi Araştırma ve Geliştirme Müdürlüğü Yönetim Portalı
+              </p>
+            </div>
+          </div>
 
-        {canAdd && (
-          <Link
-            href="/projeler/yeni"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#176C55] hover:bg-[#125845] text-white text-xs font-semibold shadow-sm shadow-[#176C55]/20 transition"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Yeni Proje Başlat</span>
-          </Link>
-        )}
+          {/* 4 Hızlı Eylem Butonu */}
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            {canAdd && (
+              <Link
+                href="/projeler/yeni"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#7A9A3B] hover:bg-[#6a8732] text-white text-xs font-bold shadow-sm transition"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Yeni Proje</span>
+              </Link>
+            )}
+            <Link
+              href="/fon-cagrilari"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white text-[#0B4F3A] hover:bg-emerald-50 text-xs font-bold shadow-sm transition"
+            >
+              <Coins className="w-4 h-4" />
+              <span>Hibe Radarı</span>
+              {pendingCallsCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-[#D61F26] text-white text-[10px] font-extrabold">
+                  {pendingCallsCount}
+                </span>
+              )}
+              {shortlistedCallsCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-[#7A9A3B] text-white text-[10px] font-extrabold">
+                  ★ {shortlistedCallsCount}
+                </span>
+              )}
+            </Link>
+            <Link
+              href="/raporlar"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold transition"
+            >
+              <Printer className="w-4 h-4" />
+              <span>Proje Özeti Çıktısı</span>
+            </Link>
+            <Link
+              href="/strateji"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold transition"
+            >
+              <Compass className="w-4 h-4" />
+              <span>Strateji &amp; Kalite</span>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* CANLI GÖSTERGE KARTLARI */}
@@ -189,58 +248,58 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* 1. SAYILARLA OSMANGAZİ */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-4">
+      {/* 1. SAYILARLA OSMANGAZİ (Ocak 2026 Resmî Sunum Verileri) */}
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-4 osmangazi-card">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#176C55]/10 text-[#176C55] flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-lg bg-[#0B4F3A]/10 text-[#0B4F3A] flex items-center justify-center font-bold">
               <Landmark className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">Sayılarla Osmangazi</h2>
-              <p className="text-xs text-slate-500">Tarihi başkentin kentsel ölçeği, nüfus büyüklüğü ve kurumsal kapasitesi</p>
+              <h2 className="text-base font-bold text-slate-900">Sayılarla Osmangazi (Ocak 2026)</h2>
+              <p className="text-xs text-slate-500">56 ilden büyük nüfus ölçeği, tarihi miras envanteri ve kurumsal hizmet ağı</p>
             </div>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-[#176C55] border border-emerald-200">
-            Bursa'nın Kalbi • Fethin 700. Yılı
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-[#0B4F3A] border border-emerald-200">
+            Bursa&apos;nın Kalbi • Fethin 700. Yılı
           </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
             <span className="text-[11px] font-semibold text-slate-500">İlçe Nüfusu</span>
-            <div className="text-xl font-bold text-slate-900 mt-1">890.000+</div>
-            <span className="text-[10px] text-slate-400 mt-0.5">Türkiye'nin 4. Büyük İlçesi</span>
+            <div className="text-xl font-extrabold text-[#0B4F3A] mt-1">886.111</div>
+            <span className="text-[10px] text-slate-500 mt-0.5">Türkiye&apos;nin 5. Büyük İlçesi</span>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
-            <span className="text-[11px] font-semibold text-slate-500">Mahalle Sayısı</span>
-            <div className="text-xl font-bold text-slate-900 mt-1">136</div>
-            <span className="text-[10px] text-slate-400 mt-0.5">Yerel Hizmet Ağı</span>
+            <span className="text-[11px] font-semibold text-slate-500">Mahalle &amp; Sokak</span>
+            <div className="text-xl font-extrabold text-slate-900 mt-1">136</div>
+            <span className="text-[10px] text-slate-500 mt-0.5">8.802 Cadde/Sokak • %95 Merkez</span>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
             <span className="text-[11px] font-semibold text-slate-500">Yüzölçümü</span>
-            <div className="text-xl font-bold text-slate-900 mt-1">714 km²</div>
-            <span className="text-[10px] text-slate-400 mt-0.5">Uludağ'dan Bursa Ovasına</span>
+            <div className="text-xl font-extrabold text-slate-900 mt-1">71.400 ha</div>
+            <span className="text-[10px] text-slate-500 mt-0.5">29 km D-B • 44 km G-K</span>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
-            <span className="text-[11px] font-semibold text-slate-500">Tarihi Miras</span>
-            <div className="text-xl font-bold text-[#176C55] mt-1">1.326</div>
-            <span className="text-[10px] text-slate-400 mt-0.5">Tescilli Anıt Eser</span>
+            <span className="text-[11px] font-semibold text-slate-500">Kültürel Miras</span>
+            <div className="text-xl font-extrabold text-[#D61F26] mt-1">2.505</div>
+            <span className="text-[10px] text-slate-500 mt-0.5">1.419 Sivil • 661 Anıtsal</span>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
-            <span className="text-[11px] font-semibold text-slate-500">Kardeş Şehir & Birlik</span>
-            <div className="text-xl font-bold text-blue-600 mt-1">11 + 10</div>
-            <span className="text-[10px] text-slate-400 mt-0.5">Küresel Şehir Ağları</span>
+            <span className="text-[11px] font-semibold text-slate-500">Hizmet Binaları</span>
+            <div className="text-xl font-extrabold text-blue-700 mt-1">92 Tesis</div>
+            <span className="text-[10px] text-slate-500 mt-0.5">6 Farklı Hizmet Kategorisi</span>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
-            <span className="text-[11px] font-semibold text-slate-500">Uluslararası Toplantı</span>
-            <div className="text-xl font-bold text-[#839B24] mt-1">425+</div>
-            <span className="text-[10px] text-slate-400 mt-0.5">Ar-Ge Ortaklık Oturumu</span>
+            <span className="text-[11px] font-semibold text-slate-500">Kurumsal Kadro</span>
+            <div className="text-xl font-extrabold text-[#7A9A3B] mt-1">2.922</div>
+            <span className="text-[10px] text-slate-500 mt-0.5">30 Müdürlük • 7 Başkan Yrd.</span>
           </div>
         </div>
       </div>
