@@ -16,6 +16,7 @@ import {
   Settings,
   Building2,
   Landmark,
+  Compass,
 } from "lucide-react";
 import { SessionUser } from "@/types";
 
@@ -53,6 +54,12 @@ export function Sidebar({ user }: SidebarProps) {
       href: "/uluslararasi",
       icon: Globe2,
       badge: "Kardeş Şehirler",
+    },
+    {
+      label: "Strateji & Kalite",
+      href: "/strateji",
+      icon: Compass,
+      badge: "13 Klasör",
     },
     { label: "Görev ve İş Takibi", href: "/gorevler", icon: CheckSquare },
     { label: "Toplantı ve Faaliyetler", href: "/toplantilar", icon: Users2 },
