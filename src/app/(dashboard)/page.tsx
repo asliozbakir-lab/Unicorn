@@ -12,10 +12,17 @@ import {
   ArrowUpRight,
   History,
   TrendingUp,
+  Landmark,
+  MapPin,
+  Users2,
+  Palette,
+  ExternalLink,
+  Shield,
 } from "lucide-react";
 import { formatCurrency, CATEGORY_LABELS, PHASE_LABELS } from "@/lib/utils";
 import { canCreateProject } from "@/lib/permissions";
 import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
+import { CorporateIdentityModal } from "@/components/dashboard/CorporateIdentityModal";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -176,6 +183,94 @@ export default async function DashboardPage() {
             <span className="text-xs text-purple-600 font-semibold">174+ Ortak</span>
           </div>
           <p className="text-[11px] text-slate-400 mt-1">Avrupa ve dünya genelinde ağ</p>
+        </div>
+      </div>
+
+      {/* 1. SAYILARLA OSMANGAZİ */}
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#176C55]/10 text-[#176C55] flex items-center justify-center font-bold">
+              <Landmark className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Sayılarla Osmangazi</h2>
+              <p className="text-xs text-slate-500">Tarihi başkentin kentsel ölçeği, nüfus büyüklüğü ve kurumsal kapasitesi</p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-[#176C55] border border-emerald-200">
+            Bursa'nın Kalbi • Fethin 700. Yılı
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">İlçe Nüfusu</span>
+            <div className="text-xl font-bold text-slate-900 mt-1">890.000+</div>
+            <span className="text-[10px] text-slate-400 mt-0.5">Türkiye'nin 4. Büyük İlçesi</span>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">Mahalle Sayısı</span>
+            <div className="text-xl font-bold text-slate-900 mt-1">136</div>
+            <span className="text-[10px] text-slate-400 mt-0.5">Yerel Hizmet Ağı</span>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">Yüzölçümü</span>
+            <div className="text-xl font-bold text-slate-900 mt-1">714 km²</div>
+            <span className="text-[10px] text-slate-400 mt-0.5">Uludağ'dan Bursa Ovasına</span>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">Tarihi Miras</span>
+            <div className="text-xl font-bold text-[#176C55] mt-1">1.326</div>
+            <span className="text-[10px] text-slate-400 mt-0.5">Tescilli Anıt Eser</span>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">Kardeş Şehir & Birlik</span>
+            <div className="text-xl font-bold text-blue-600 mt-1">11 + 10</div>
+            <span className="text-[10px] text-slate-400 mt-0.5">Küresel Şehir Ağları</span>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+            <span className="text-[11px] font-semibold text-slate-500">Uluslararası Toplantı</span>
+            <div className="text-xl font-bold text-[#839B24] mt-1">425+</div>
+            <span className="text-[10px] text-slate-400 mt-0.5">Ar-Ge Ortaklık Oturumu</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. KURUMSAL KİMLİK KİTABI VE TASARIM KILAVUZU */}
+      <div className="bg-gradient-to-r from-slate-900 to-[#176C55] text-white p-6 rounded-2xl shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div className="space-y-2 max-w-xl">
+          <div className="flex items-center gap-2">
+            <Palette className="w-5 h-5 text-[#839B24]" />
+            <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+              Osmangazi Belediyesi & 700. Yıl
+            </span>
+          </div>
+          <h3 className="text-xl font-bold tracking-tight">
+            Resmî Kurumsal Kimlik Kitabı & Tasarım Kılavuzu
+          </h3>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Müdürlüğün ve 700. yıl anma etkinliklerinin logo standartları, antetli şablonları,
+            resmî renk paleti (#176C55, #839B24, #1A1A2E), tipografi hiyerarşisi ve kurumsal tanıtım materyalleri.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <CorporateIdentityModal />
+          <a
+            href="https://drive.google.com/drive/folders/17113jZ-vMzb9WjXZeg7FlrGgblQ9xxzl"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#839B24] hover:bg-[#6f841e] text-white text-xs font-bold shadow-xs transition"
+          >
+            <ExternalLink className="w-4 h-4" />
+            <span>Drive Kurumsal Kimlik Dosyası ↗</span>
+          </a>
         </div>
       </div>
 

@@ -307,18 +307,29 @@ model SisterCity {
 }
 
 model ConquestPanel {
-  id             String    @id @default(cuid())
-  title          String
-  institution    String
-  contactPerson  String?
-  moderator      String?
-  panelists      String?
-  date           String?
-  location       String?
-  contactInfo    String?
-  notes          String?
-  planningStatus String    @default("PLANNING")
-  dataCollection String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  title             String
+  institution       String
+  contactPerson     String?
+  moderator         String?
+  panelists         String?
+  date              String?
+  location          String?
+  contactInfo       String?
+  notes             String?
+  planningStatus    String    @default("PLANNING")
+  currentStage      Int       @default(1)
+  checklist         String?
+  dataCollection    String?
+  driveFolderUrl    String?
+  budget            Float?
+  expectedAttendees Int?
+  actualAttendees   Int?
+  photosUrl         String?
+  pressUrl          String?
+  presentationUrl   String?
+  declarationUrl    String?
+  dossierNotes      String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
