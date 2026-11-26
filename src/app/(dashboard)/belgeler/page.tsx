@@ -60,13 +60,13 @@ export default async function DocumentsPage({ searchParams }: DocumentsPageProps
 
         <div className="flex items-center gap-3">
           <a
-            href="https://drive.google.com"
+            href="https://drive.google.com/drive/folders/1NbO_5Ph8nUrtMpI0t4auipVjippJk3EY"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100/70 text-[#176C55] text-xs font-semibold shadow-xs transition"
           >
-            <FolderOpen className="w-4 h-4 text-amber-500" />
-            <span>Drive Klasörünü Aç ↗</span>
+            <FolderOpen className="w-4 h-4 text-emerald-600" />
+            <span>Ar-Ge Drive Klasörünü Aç ↗</span>
           </a>
           <NewDriveDocModal />
         </div>
