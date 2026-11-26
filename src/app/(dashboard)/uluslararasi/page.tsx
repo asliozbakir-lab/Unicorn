@@ -4,6 +4,27 @@ import { NewSisterCityModal } from "@/components/international/NewSisterCityModa
 import { NewUnionModal } from "@/components/international/NewUnionModal";
 import { SisterCityCard } from "@/components/international/SisterCityCard";
 
+function getUnionLogo(name: string): string | null {
+  const n = name.toLowerCase();
+  if (n.includes("eurocities")) return "/logos/birlikler/eurocities.jpg";
+  if (n.includes("uclg")) return "/logos/birlikler/uclg_mewa.png";
+  if (n.includes("tarihi kentler birliği") && !n.includes("dünya")) return "/logos/birlikler/tarihi_kentler_birligi.jpg";
+  if (n.includes("dünya tarihi kentler") || n.includes("lhc")) return "/logos/birlikler/lhc_historical_cities.png";
+  if (n.includes("civitas")) return "/logos/birlikler/civitas.png";
+  if (n.includes("marmara belediyeler") || n.includes("mbb")) return "/logos/birlikler/marmara_belediyeler_birligi.jpg";
+  if (n.includes("türkiye belediyeler") || n.includes("tbb")) return "/logos/birlikler/turkiye_belediyeler_birligi.jpg";
+  if (n.includes("sağlıklı kentler")) return "/logos/birlikler/saglikli_kentler_birligi.jpg";
+  if (n.includes("enerji kentleri")) return "/logos/birlikler/enerji_kentleri_birligi.jpg";
+  if (n.includes("çevreci belediyeler")) return "/logos/birlikler/cevreci_belediyeler_birligi.png";
+  if (n.includes("mayors for peace") || n.includes("barış")) return "/logos/birlikler/mayors_for_peace.png";
+  if (n.includes("türk dünyası") || n.includes("tdbb")) return "/logos/birlikler/tdbb.jpg";
+  if (n.includes("kültürlerarası") || n.includes("icc")) return "/logos/birlikler/icc_coe.png";
+  if (n.includes("panorama") || n.includes("ipc")) return "/logos/birlikler/ipc_panorama.png";
+  if (n.includes("tarihi kentler") || n.includes("eahtr")) return "/logos/birlikler/eahtr.png";
+  if (n.includes("bebka")) return "/logos/birlikler/bebka.jpg";
+  return null;
+}
+
 export default async function InternationalRelationsPage() {
   const [sisterCities, unions, countries, organizations] = await Promise.all([
     prisma.sisterCity.findMany({
@@ -111,26 +132,40 @@ export default async function InternationalRelationsPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {unions.map((net) => (
-            <div key={net.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <div className="text-xs font-bold text-slate-900">{net.name}</div>
-                  {net.joinedYear && (
-                    <span className="text-[10px] font-medium text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                      Üyelik: {net.joinedYear}
-                    </span>
-                  )}
+          {unions.map((net) => {
+            const logo = getUnionLogo(net.name);
+            return (
+              <div key={net.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#176C55]/40 hover:bg-white transition flex flex-col justify-between">
+                <div>
+                  <div className="flex items-start gap-3 mb-2">
+                    {logo ? (
+                      <div className="w-12 h-12 rounded-xl bg-white border border-slate-200/80 p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                        <img src={logo} alt={net.name} className="w-full h-full object-contain" />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl bg-[#176C55]/10 text-[#176C55] flex items-center justify-center font-bold shrink-0">
+                        <Award className="w-6 h-6" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">{net.name}</div>
+                      {net.joinedYear && (
+                        <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 mt-1 inline-block">
+                          Üyelik: {net.joinedYear}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-1 leading-relaxed line-clamp-3">{net.description}</p>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">{net.description}</p>
-              </div>
 
-              <div className="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
-                <span className="text-[#839B24] font-semibold">Aktif Temsil</span>
-                <span className="text-slate-400">Ar-Ge Müdürlüğü</span>
+                <div className="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
+                  <span className="text-[#839B24] font-semibold">Aktif Temsil</span>
+                  <span className="text-slate-400">Ar-Ge Müdürlüğü</span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

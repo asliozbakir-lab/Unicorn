@@ -211,6 +211,36 @@ const gdriveDocs = [
 
   // 4. KURUMSAL YÖNETİM VE BASIN
   {
+    name: "Osmangazi Belediyesi Kurumsal Kimlik Rehberi (PDF)",
+    type: "REPORT",
+    category: "CORPORATE_PUBLIC",
+    filePath: "https://drive.google.com/file/d/1oOHkZ6hmFGsWQK4HXxoZEfQhmirCsbX1/view",
+    driveUrl: "https://drive.google.com/file/d/1oOHkZ6hmFGsWQK4HXxoZEfQhmirCsbX1/view",
+    description: "67 MB resmî kurumsal kimlik kitabı: amblem oranları, Pantone renkleri, antetli kağıt, kartvizit, bayrak, araç ve bina giydirme standartları.",
+    uploadedBy: "Aslı Ökten",
+    version: "v2026.1",
+  },
+  {
+    name: "Osmangazi Belediyesi Kurumsal Kimlik Kitabı Klasörü",
+    type: "GOOGLE_DRIVE_FOLDER",
+    category: "CORPORATE_PUBLIC",
+    filePath: "https://drive.google.com/drive/folders/1Dx_A_Js8YTeMFok6OZOqWbf4fMWjdA2e",
+    driveUrl: "https://drive.google.com/drive/folders/1Dx_A_Js8YTeMFok6OZOqWbf4fMWjdA2e",
+    description: "Vektörel logo formatları (AI, EPS, PNG, PDF), tipografi font dosyaları ve belediye kurumsal tasarım arşivi.",
+    uploadedBy: "Aslı Ökten",
+    version: "v2026.Folder",
+  },
+  {
+    name: "Osmangazi Belediyesi 2025–2029 Stratejik Plan Kitabı",
+    type: "REPORT",
+    category: "CORPORATE_PUBLIC",
+    filePath: "https://drive.google.com/file/d/1NOf8hBHbwY5LkNPoEqihMNvxAObqJGSw/view",
+    driveUrl: "https://drive.google.com/file/d/1NOf8hBHbwY5LkNPoEqihMNvxAObqJGSw/view",
+    description: "Osmangazi Belediyesi 5 yıllık kurumsal stratejik vizyon belgesi: Ar-Ge hedefleri, iklim eylemi, tarihi miras ve kentsel politikalar.",
+    uploadedBy: "Aslı Ökten",
+    version: "v2025-2029",
+  },
+  {
     name: "Osmangazi Ar-Ge Müdürlüğü Ana Drive Klasörü",
     type: "GOOGLE_DRIVE_FOLDER",
     category: "CORPORATE_PUBLIC",

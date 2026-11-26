@@ -18,6 +18,9 @@ import {
   Palette,
   ExternalLink,
   Shield,
+  Target,
+  Compass,
+  FileText,
 } from "lucide-react";
 import { formatCurrency, CATEGORY_LABELS, PHASE_LABELS } from "@/lib/utils";
 import { canCreateProject } from "@/lib/permissions";
@@ -242,35 +245,91 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* 2. KURUMSAL KİMLİK KİTABI VE TASARIM KILAVUZU */}
-      <div className="bg-gradient-to-r from-slate-900 to-[#176C55] text-white p-6 rounded-2xl shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-        <div className="space-y-2 max-w-xl">
-          <div className="flex items-center gap-2">
-            <Palette className="w-5 h-5 text-[#839B24]" />
-            <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
-              Osmangazi Belediyesi & 700. Yıl
-            </span>
+      {/* 2. KURUMSAL KİMLİK KİTAPLARI VE 2029 STRATEJİK PLANI */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Sol Kart: Çift Kurumsal Kimlik Standardı */}
+        <div className="bg-gradient-to-br from-slate-900 to-[#176C55] text-white p-5 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Palette className="w-4 h-4 text-[#839B24]" />
+              <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">
+                Çift Kurumsal Kimlik Standardı
+              </span>
+            </div>
+            <h3 className="text-base font-bold tracking-tight">
+              Kurumsal Kimlik Rehberleri & Tasarım Kılavuzları
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              <strong>Osmangazi Belediyesi</strong> resmî amblem, antetli şablon, araç giydirme ve <strong>Fetih 700. Yıl</strong> özel varaklı anma logoları (#176C55, #839B24, #C5A059).
+            </p>
           </div>
-          <h3 className="text-xl font-bold tracking-tight">
-            Resmî Kurumsal Kimlik Kitabı & Tasarım Kılavuzu
-          </h3>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            Müdürlüğün ve 700. yıl anma etkinliklerinin logo standartları, antetli şablonları,
-            resmî renk paleti (#176C55, #839B24, #1A1A2E), tipografi hiyerarşisi ve kurumsal tanıtım materyalleri.
-          </p>
+
+          <div className="flex flex-wrap items-center gap-2 pt-4 mt-2 border-t border-white/10">
+            <CorporateIdentityModal 
+              municipalDriveUrl="https://drive.google.com/drive/folders/1Dx_A_Js8YTeMFok6OZOqWbf4fMWjdA2e"
+              municipalPdfUrl="https://drive.google.com/file/d/1oOHkZ6hmFGsWQK4HXxoZEfQhmirCsbX1/view"
+            />
+            <a
+              href="https://drive.google.com/file/d/1oOHkZ6hmFGsWQK4HXxoZEfQhmirCsbX1/view"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold shadow-2xs transition"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Belediye PDF (67 MB) ↗</span>
+            </a>
+            <a
+              href="https://drive.google.com/drive/folders/17113jZ-vMzb9WjXZeg7FlrGgblQ9xxzl"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#839B24] hover:bg-[#6f841e] text-white text-xs font-semibold shadow-2xs transition"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>700. Yıl Drive ↗</span>
+            </a>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
-          <CorporateIdentityModal />
-          <a
-            href="https://drive.google.com/drive/folders/17113jZ-vMzb9WjXZeg7FlrGgblQ9xxzl"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#839B24] hover:bg-[#6f841e] text-white text-xs font-bold shadow-xs transition"
-          >
-            <ExternalLink className="w-4 h-4" />
-            <span>Drive Kurumsal Kimlik Dosyası ↗</span>
-          </a>
+        {/* Sağ Kart: Osmangazi Belediyesi 2025-2029 Stratejik Planı */}
+        <div className="bg-gradient-to-br from-emerald-950 via-[#176C55] to-slate-900 text-white p-5 rounded-2xl shadow-sm flex flex-col justify-between">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-emerald-300" />
+                <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">
+                  5 Yıllık Kurumsal Vizyon
+                </span>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                2025 – 2029
+              </span>
+            </div>
+            <h3 className="text-base font-bold tracking-tight">
+              Osmangazi Belediyesi 2025–2029 Stratejik Planı
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Ar-Ge hedefleri, iklim eylemi, tarihi mirasın korunması, dijitalleşme ve kentsel dönüşüm stratejilerini içeren 5 yıllık resmî politika belgesi.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 pt-4 mt-2 border-t border-white/10">
+            <a
+              href="https://drive.google.com/file/d/1NOf8hBHbwY5LkNPoEqihMNvxAObqJGSw/view"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-xs transition"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Stratejik Plan Kitabını Aç (PDF) ↗</span>
+            </a>
+            <Link
+              href="/belgeler?kategori=CORPORATE_PUBLIC"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold shadow-2xs transition"
+            >
+              <Compass className="w-3.5 h-3.5 text-emerald-300" />
+              <span>Kurumsal Belgeler Arşivi</span>
+            </Link>
+          </div>
         </div>
       </div>
 
